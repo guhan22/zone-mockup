@@ -1,4 +1,4 @@
-import { useState, CSSProperties } from "react";
+import { useState, CSSProperties, useEffect } from "react";
 import { Car, UserPlus, Users, History, Edit2, Trash2, Plus, X, RefreshCw, LogIn, LogOut } from "lucide-react";
 import { useT } from "../components/Theme";
 import { Card, FilledBtn, OutlinedBtn, TonalBtn, Chip, Divider } from "../components/UI";
@@ -14,6 +14,16 @@ interface ResidentVehicle {
 export default function ResidentPortal() {
   const t = useT();
   const [tab, setTab] = useState<TabType>("vehicles");
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" ? window.innerWidth < 860 : false
+  );
+
+  useEffect(() => {
+    const fn = () => setIsMobile(window.innerWidth < 860);
+    window.addEventListener("resize", fn);
+    return () => window.removeEventListener("resize", fn);
+  }, []);
+
   const tabs = [
     { id: "vehicles", label: "My vehicles",    icon: <Car size={15} /> },
     { id: "register", label: "Register guest", icon: <UserPlus size={15} /> },
@@ -29,7 +39,7 @@ export default function ResidentPortal() {
   };
 
   return (
-    <div style={{ padding: "20px", maxWidth: 820 }}>
+    <div style={{ padding: isMobile ? "16px" : "20px", maxWidth: 820 }}>
       {/* Profile */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
         <div>
@@ -45,7 +55,7 @@ export default function ResidentPortal() {
       </div>
 
       {/* Tabs */}
-      <div style={{ display: "flex", borderBottom: `1px solid ${t.outlineVariant}`, marginBottom: 24, overflowX: "auto" }}>
+      <div style={{ display: "flex", borderBottom: `1px solid ${t.outlineVariant}`, marginBottom: 24, overflowX: "auto", margin: isMobile ? "0 -16px 24px -16px" : "0 0 24px 0", padding: isMobile ? "0 16px" : 0 }}>
         {tabs.map(({ id, label, icon }) => (
           <button key={id} onClick={() => setTab(id as TabType)} style={{
             display: "flex", alignItems: "center", gap: 6, padding: "10px 20px",
@@ -97,7 +107,7 @@ export default function ResidentPortal() {
       {tab === "register" && (
         <Card>
           <div style={{ fontSize: 16, fontWeight: 500, color: t.onSurface, marginBottom: 20 }}>Register a guest</div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 14 }}>
             {[
               { label: "Guest name",    ph: "e.g. John Lee" },
               { label: "Guest mobile",  ph: "+65 9XXX XXXX" },
@@ -125,7 +135,7 @@ export default function ResidentPortal() {
               <label style={{ fontSize: 12, color: t.onSurfaceVariant, display: "block", marginBottom: 6 }}>Valid until</label>
               <input type="datetime-local" defaultValue="2026-04-19T18:00" style={{ ...inputSt }} />
             </div>
-            <div style={{ gridColumn: "1 / -1" }}>
+            <div style={{ gridColumn: isMobile ? "auto" : "1 / -1" }}>
               <label style={{ fontSize: 12, color: t.onSurfaceVariant, display: "block", marginBottom: 6 }}>Notes (optional)</label>
               <input placeholder="e.g. Friend visiting for dinner" style={{ ...inputSt }} />
             </div>
@@ -140,9 +150,9 @@ export default function ResidentPortal() {
             </div>
             Guest will receive a WhatsApp message with a self-service link to update their vehicle plate.
           </div>
-          <div style={{ display: "flex", justifyContent: "flex-end", gap: 10, marginTop: 20 }}>
-            <OutlinedBtn>Cancel</OutlinedBtn>
-            <FilledBtn icon={<UserPlus size={15} />}>Register guest</FilledBtn>
+          <div style={{ display: "flex", flexDirection: isMobile ? "column-reverse" : "row", justifyContent: "flex-end", gap: 10, marginTop: 20 }}>
+            <OutlinedBtn full={isMobile}>Cancel</OutlinedBtn>
+            <FilledBtn icon={<UserPlus size={15} />} full={isMobile}>Register guest</FilledBtn>
           </div>
         </Card>
       )}
