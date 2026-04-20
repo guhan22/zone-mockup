@@ -45,7 +45,7 @@ export function FilledBtn({ children, onClick, icon, full, small, danger }: BtnP
   );
 }
 
-export function OutlinedBtn({ children, onClick, icon, small, danger }: BtnProps) {
+export function OutlinedBtn({ children, onClick, icon, full, small, danger }: BtnProps) {
   const t = useT();
   return (
     <button onClick={onClick} style={{
@@ -55,14 +55,15 @@ export function OutlinedBtn({ children, onClick, icon, small, danger }: BtnProps
       borderRadius: 50, padding: small ? "5px 16px" : "9px 24px",
       fontSize: small ? 12 : 14, fontWeight: 500, cursor: "pointer",
       display: "flex", alignItems: "center", gap: 6,
-      fontFamily: "inherit",
+      fontFamily: "inherit", width: full ? "100%" : "auto",
+      justifyContent: "center",
     }}>
       {icon}{children}
     </button>
   );
 }
 
-export function TonalBtn({ children, onClick, icon, small }: BtnProps) {
+export function TonalBtn({ children, onClick, icon, full, small }: BtnProps) {
   const t = useT();
   return (
     <button onClick={onClick} style={{
@@ -71,7 +72,8 @@ export function TonalBtn({ children, onClick, icon, small }: BtnProps) {
       padding: small ? "5px 16px" : "9px 24px",
       fontSize: small ? 12 : 14, fontWeight: 500, cursor: "pointer",
       display: "flex", alignItems: "center", gap: 6,
-      fontFamily: "inherit",
+      fontFamily: "inherit", width: full ? "100%" : "auto",
+      justifyContent: "center",
     }}>
       {icon}{children}
     </button>
